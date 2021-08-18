@@ -3,7 +3,7 @@
   <section class="women-banner spad">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-12 mt-5">
+        <div class="col-lg-12 mt-5" v-if="products.length > 0">
           <carousel
             class="product-slider"
             :nav="false"
@@ -11,7 +11,7 @@
             :dots="false"
             :autoplay="true"
           >
-            <div class="product-item">
+            <div class="product-item" v-for="item in products" :key="item.id">
               <div class="pi-pic">
                 <img src="img/mickey1.jpg" alt="" />
                 <ul>
@@ -26,17 +26,17 @@
                 </ul>
               </div>
               <div class="pi-text">
-                <div class="catagory-name">Coat</div>
+                <div class="catagory-name">{{ item.type }}</div>
                 <router-link to="/product">
-                  <h5>Mickey Baggy</h5>
+                  <h5>{{ item.name }}</h5>
                 </router-link>
                 <div class="product-price">
-                  $14.00
+                  ${{ item.price }}
                   <span>$35.00</span>
                 </div>
               </div>
             </div>
-            <div class="product-item">
+            <!-- <div class="product-item">
               <div class="pi-pic">
                 <img src="img/products/women-2.jpg" alt="" />
                 <ul>
@@ -98,8 +98,11 @@
                   $34.00
                 </div>
               </div>
-            </div>
+            </div> -->
           </carousel>
+        </div>
+        <div class="col-lg-12" v-else>
+          <p>Produk terbaru belum tersedia</p>
         </div>
       </div>
     </div>
@@ -109,10 +112,25 @@
 
 <script>
 import carousel from "vue-owl-carousel";
+import axios from "axios";
+
 export default {
   name: "Banner",
+  data() {
+    return {
+      products: [],
+    };
+  },
   components: {
     carousel,
+  },
+  mounted() {
+    axios
+      .get("http://localhost:8000/api/products")
+      .then((res) => {
+        this.products = res.data.data.data;
+      })
+      .catch((err) => console.log(err));
   },
 };
 </script>
