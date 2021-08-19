@@ -30,24 +30,31 @@
                 Keranjang Belanja &nbsp;
                 <a href="#">
                   <i class="icon_bag_alt"></i>
-                  <span>3</span>
+                  <span>{{ userCart.length }}</span>
                 </a>
                 <div class="cart-hover">
                   <div class="select-items">
                     <table>
-                      <tbody>
-                        <tr>
+                      <tbody v-if="userCart.length > 0">
+                        <tr v-for="item in userCart" :key="item.id">
                           <td class="si-pic">
-                            <img src="img/select-product-1.jpg" alt="" />
+                            <img class="cart-photo" :src="item.photo" alt="" />
                           </td>
                           <td class="si-text">
                             <div class="product-selected">
-                              <p>$60.00 x 1</p>
-                              <h6>Kabino Bedside Table</h6>
+                              <p>${{ item.price }} x 1</p>
+                              <h6>{{ item.name }}</h6>
                             </div>
                           </td>
                           <td class="si-close">
                             <i class="ti-close"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tbody v-else>
+                        <tr>
+                          <td>
+                            Keranjang Kosong
                           </td>
                         </tr>
                       </tbody>
@@ -75,5 +82,26 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      userCart: [],
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("userCart")) {
+      try {
+        this.userCart = JSON.parse(localStorage.getItem("userCart"));
+      } catch (e) {
+        localStorage.removeItem("userCart");
+      }
+    }
+  },
 };
 </script>
+
+<style scoped>
+.cart-photo {
+  width: 80px;
+  height: 80px;
+}
+</style>
