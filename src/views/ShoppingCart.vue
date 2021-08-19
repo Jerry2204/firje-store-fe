@@ -37,7 +37,7 @@
                     <tbody v-if="userCart.length > 0">
                       <tr v-for="item in userCart" :key="item.id">
                         <td class="cart-pic first-row">
-                          <img :src="item.photo" />
+                          <img :src="item.photo" class="img-cart" />
                         </td>
                         <td class="cart-title first-row text-center">
                           <h5>{{ item.name }}</h5>
@@ -181,3 +181,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.img-cart {
+  max-width: 120px;
+  max-height: 80px;
+}
+</style>

@@ -65,7 +65,7 @@
                   </div>
                   <div class="select-total">
                     <span>total:</span>
-                    <h5>$120.00</h5>
+                    <h5>${{ priceTotal }}</h5>
                   </div>
                   <div class="select-button">
                     <router-link class="primary-btn view-card" to="/cart">
@@ -108,12 +108,19 @@ export default {
       }
     }
   },
+  computed: {
+    priceTotal() {
+      return this.userCart.reduce(function(items, data) {
+        return items + data.price;
+      }, 0);
+    },
+  },
 };
 </script>
 
 <style scoped>
 .cart-photo {
-  width: 80px;
-  height: 80px;
+  max-width: 90px;
+  max-height: 80px;
 }
 </style>
