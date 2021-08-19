@@ -13,13 +13,13 @@
           >
             <div class="product-item" v-for="item in products" :key="item.id">
               <div class="pi-pic">
-                <img src="img/mickey1.jpg" alt="" />
+                <img :src="item.galleries[0].photo" alt="" />
                 <ul>
                   <li class="w-icon active">
                     <a href="#"><i class="icon_bag_alt"></i></a>
                   </li>
                   <li class="quick-view">
-                    <router-link to="/product">
+                    <router-link :to="'/product/' + item.id">
                       + Quick View
                     </router-link>
                   </li>
@@ -27,7 +27,7 @@
               </div>
               <div class="pi-text">
                 <div class="catagory-name">{{ item.type }}</div>
-                <router-link to="/product">
+                <router-link :to="'/product/' + item.id">
                   <h5>{{ item.name }}</h5>
                 </router-link>
                 <div class="product-price">
