@@ -46,7 +46,10 @@
                               <h6>{{ item.name }}</h6>
                             </div>
                           </td>
-                          <td class="si-close">
+                          <td
+                            @click="removeItemCart(item.index)"
+                            class="si-close"
+                          >
                             <i class="ti-close"></i>
                           </td>
                         </tr>
@@ -86,6 +89,13 @@ export default {
     return {
       userCart: [],
     };
+  },
+  methods: {
+    removeItemCart(index) {
+      this.userCart.splice(index);
+      const parsed = JSON.stringify(this.userCart);
+      localStorage.setItem("userCart", parsed);
+    },
   },
   mounted() {
     if (localStorage.getItem("userCart")) {
