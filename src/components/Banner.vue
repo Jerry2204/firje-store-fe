@@ -16,7 +16,20 @@
                 <img :src="item.galleries[0].photo" alt="" />
                 <ul>
                   <li class="w-icon active">
-                    <a href="#"><i class="icon_bag_alt"></i></a>
+                    <router-link to="/cart">
+                      <a
+                        href="#"
+                        @click="
+                          saveToCart(
+                            item.id,
+                            item.name,
+                            item.galleries[0].photo,
+                            item.price
+                          )
+                        "
+                        ><i class="icon_bag_alt"></i
+                      ></a>
+                    </router-link>
                   </li>
                   <li class="quick-view">
                     <router-link :to="'/product/' + item.id">
@@ -119,12 +132,34 @@ export default {
   data() {
     return {
       products: [],
+      userCart: [],
     };
   },
   components: {
     carousel,
   },
+  methods: {
+    saveToCart(idProduct, name, photo, price) {
+      var productStored = {
+        id: idProduct,
+        name: name,
+        photo: photo,
+        price: price,
+      };
+
+      this.userCart.push(productStored);
+      const parsed = JSON.stringify(this.userCart);
+      localStorage.setItem("userCart", parsed);
+    },
+  },
   mounted() {
+    if (localStorage.getItem("userCart")) {
+      try {
+        this.userCart = JSON.parse(localStorage.getItem("userCart"));
+      } catch (e) {
+        localStorage.removeItem("userCart");
+      }
+    }
     axios
       .get("http://localhost:8000/api/products")
       .then((res) => {

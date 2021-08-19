@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     removeItemCart(index) {
-      this.userCart.splice(index);
+      this.userCart.splice(index, 1);
       const parsed = JSON.stringify(this.userCart);
       localStorage.setItem("userCart", parsed);
     },
