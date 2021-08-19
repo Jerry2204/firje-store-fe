@@ -34,16 +34,19 @@
                         <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
+                    <tbody v-if="userCart.length > 0">
+                      <tr v-for="item in userCart" :key="item.id">
                         <td class="cart-pic first-row">
-                          <img src="img/cart-page/product-1.jpg" />
+                          <img :src="item.photo" />
                         </td>
                         <td class="cart-title first-row text-center">
-                          <h5>Pure Pineapple</h5>
+                          <h5>{{ item.name }}</h5>
                         </td>
-                        <td class="p-price first-row">$60.00</td>
-                        <td class="delete-item">
+                        <td class="p-price first-row">${{ item.price }}</td>
+                        <td
+                          class="delete-item"
+                          @click="removeItemCart(item.index)"
+                        >
                           <a href="#"
                             ><i class="material-icons">
                               close
@@ -51,20 +54,11 @@
                           >
                         </td>
                       </tr>
+                    </tbody>
+                    <tbody v-else>
                       <tr>
-                        <td class="cart-pic first-row">
-                          <img src="img/cart-page/product-1.jpg" />
-                        </td>
-                        <td class="cart-title first-row text-center">
-                          <h5>Pure Pineapple</h5>
-                        </td>
-                        <td class="p-price first-row">$60.00</td>
-                        <td class="delete-item">
-                          <a href="#"
-                            ><i class="material-icons">
-                              close
-                            </i></a
-                          >
+                        <td colspan="3">
+                          Keranjang Kosong
                         </td>
                       </tr>
                     </tbody>
@@ -143,8 +137,9 @@
                       Nama Penerima <span>Shayna</span>
                     </li>
                   </ul>
-                  <router-link
-                   to="/success" class="proceed-btn">I ALREADY PAID</router-link>
+                  <router-link to="/success" class="proceed-btn"
+                    >I ALREADY PAID</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -162,6 +157,27 @@ export default {
   name: "ShoppingCart",
   components: {
     Header,
+  },
+  data() {
+    return {
+      userCart: [],
+    };
+  },
+  methods: {
+    removeItemCart(index) {
+      this.userCart.splice(index, 1);
+      const parsed = JSON.stringify(this.userCart);
+      localStorage.setItem("userCart", parsed);
+    },
+  },
+  mounted() {
+    if (localStorage.getItem("userCart")) {
+      try {
+        this.userCart = JSON.parse(localStorage.getItem("userCart"));
+      } catch (e) {
+        localStorage.removeItem("userCart");
+      }
+    }
   },
 };
 </script>
