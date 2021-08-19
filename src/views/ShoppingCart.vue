@@ -122,10 +122,14 @@
                     <li class="subtotal">
                       ID Transaction <span>#SH12000</span>
                     </li>
-                    <li class="subtotal mt-3">Subtotal <span>$240.00</span></li>
-                    <li class="subtotal mt-3">Pajak <span>10%</span></li>
                     <li class="subtotal mt-3">
-                      Total Biaya <span>$440.00</span>
+                      Subtotal <span>${{ priceTotal }}</span>
+                    </li>
+                    <li class="subtotal mt-3">
+                      Pajak <span>10% / {{ taxPrice }}</span>
+                    </li>
+                    <li class="subtotal mt-3">
+                      Total Biaya <span>${{ total }}</span>
                     </li>
                     <li class="subtotal mt-3">
                       Bank Transfer <span>Mandiri</span>
@@ -178,6 +182,19 @@ export default {
         localStorage.removeItem("userCart");
       }
     }
+  },
+  computed: {
+    priceTotal() {
+      return this.userCart.reduce(function(items, data) {
+        return items + data.price;
+      }, 0);
+    },
+    taxPrice() {
+      return (this.priceTotal * 10) / 100;
+    },
+    total() {
+      return this.priceTotal + this.taxPrice;
+    },
   },
 };
 </script>
