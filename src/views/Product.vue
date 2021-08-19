@@ -59,9 +59,22 @@
                     <h4>${{ product_detail.price }}</h4>
                   </div>
                   <div class="quantity">
-                    <router-link to="/cart" class="primary-btn pd-cart"
-                      >Add To Cart</router-link
+                    <!-- <router-link to="/cart" class="primary-btn pd-cart"> -->
+                    <a
+                      href="#"
+                      @click="
+                        saveToCart(
+                          product_detail.id,
+                          product_detail.name,
+                          product_detail.galleries[0].photo,
+                          product_detail.price
+                        )
+                      "
+                      class="primary-btn pd-cart"
                     >
+                      Add To Cart
+                    </a>
+                    <!-- </router-link> -->
                   </div>
                 </div>
               </div>
@@ -90,13 +103,8 @@ export default {
   data() {
     return {
       picture: "",
-      thumbs: [
-        "img/mickey1.jpg",
-        "img/mickey2.jpg",
-        "img/mickey3.jpg",
-        "img/mickey4.jpg",
-      ],
       product_detail: [],
+      userCart: [],
     };
   },
   name: "Product",
@@ -114,8 +122,27 @@ export default {
       this.product_detail = data;
       this.picture = data.galleries[0].photo;
     },
+    saveToCart(idProduct, name, photo, price) {
+      var productStored = {
+        id: idProduct,
+        name: name,
+        photo: photo,
+        price: price,
+      };
+
+      this.userCart.push(productStored);
+      const parsed = JSON.stringify(this.userCart);
+      localStorage.setItem("userCart", parsed);
+    },
   },
   mounted() {
+    if (localStorage.getItem("userCart")) {
+      try {
+        this.userCart = JSON.parse(localStorage.getItem("userCart"));
+      } catch (e) {
+        localStorage.removeItem("userCart");
+      }
+    }
     axios
       .get("http://localhost:8000/api/products", {
         params: {
